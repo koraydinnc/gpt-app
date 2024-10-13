@@ -19,9 +19,9 @@ export default async function handler(req, res) {
         },
       });
 
-      return res.status(200).json({ message: 'Kullanıcı başarıyla oluşturuldu', user: newUser });
+      return res.status(200).json({status:1, message: 'Kullanıcı başarıyla oluşturuldu', user: newUser });
     } catch (error) {
-      return res.status(500).json({ message: 'Kullanıcı oluşturulurken bir hata oluştu', error: error.message });
+      return res.status(500).json({status:-1, message: 'Kullanıcı oluşturulurken bir hata oluştu', error: error.message });
     }
   } else {
     res.setHeader('Allow', ['POST']);
