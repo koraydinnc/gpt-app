@@ -15,13 +15,10 @@ import {
   FormMessage,
 } from "@/components/ui/form"; 
 import { Input } from "../ui/input";
-import { useRegisterMutation } from '../../../services/authApi';
+import { useLoginMutation } from '../../../services/authApi';
 import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Kullanıcı adı en az 2 karakter olmalıdır.",
-  }),
   email: z.string().email({
     message: "Geçersiz e-posta adresi.",
   }),
@@ -32,11 +29,10 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter(); 
-  const [register, { isLoading, error }] = useRegisterMutation();
+  const [login, { isLoading, error }] = useLoginMutation();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },
@@ -44,9 +40,9 @@ export function LoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      const result = await register(data).unwrap();
+      const result = await login(data).unwrap();
       notification.success({
-        message: 'Kayıt Başarılı',
+        message: 'Giriş Başarılı',
         placement: 'top',
       });
       
@@ -55,6 +51,11 @@ export function LoginForm() {
       }
       console.log('Kullanıcı başarıyla kaydedildi:', result);
     } catch (err) {
+      notification.error({
+        message: 'Giriş Hatası',
+        description: error?.data?.message || 'Giriş sırasında bir hata oluştu.',
+        placement: 'top',
+      });
       console.error('Kayıt hatası:', error);
     }
   };
@@ -98,8 +99,6 @@ export function LoginForm() {
             Giriş Yap
           </Button>
         )}
-
-        {error && <p className="text-red-500">{error?.data?.message || 'Kayıt sırasında bir hata oluştu.'}</p>}
       </form>
     </Form>
   );

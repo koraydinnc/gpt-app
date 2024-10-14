@@ -1,6 +1,6 @@
 "use client"
-import { AuthForm } from '@/components/auth/AuthForm'
 import React from 'react'
+import {AuthForm} from '../../components/auth/AuthForm'
 
 const login = () => {
   return (
